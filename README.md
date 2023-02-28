@@ -5,7 +5,7 @@
 [![Tests](https://github.com/paulhennell/twitter-account-info/actions/workflows/run-tests.yml/badge.svg?branch=main)](https://github.com/paulhennell/twitter-account-info/actions/workflows/run-tests.yml)
 [![Total Downloads](https://img.shields.io/packagist/dt/paulhennell/twitter-account-info.svg?style=flat-square)](https://packagist.org/packages/paulhennell/twitter-account-info)
 
-This is a basic package to get the number of followers an account has on Twitter without the complications of the official Twitter API. As a non-official project however it should be considered possible to stop working at any time. 
+This is a basic package to get the number of followers and other basic account info from Twitter without the complications of the official Twitter API. As a non-official project it should not be considered totally reliable, and as of v1.0 this relies on a Nitter instance, so if they all break, this will too.
 
 ## Installation
 
@@ -25,15 +25,12 @@ composer require guzzlehttp/psr7
 
 ## Usage
 
-You can use the system by account name or by Twitter ID. A recommended workflow is
-to use the name first to acquire the ID, then store the ID for repeat checking.
+You use the system by passing in a twitter username
 
 ```php
 $accountInfo = (new Paulhennell\TwitterAccountInfo())->getFromUsername("hennell_dev");
 echo $accountInfo->followers_count;
-
-$accountInfo = (new Paulhennell\TwitterAccountInfo())->getFromId("1261694242067447808");
-echo $accountInfo->formatted_followers_count;
+echo $accountInfo->tweet_count; //etc
 ```
 
 If your HTTP Client isn't automatically discovered you can pass it into the constructor:
@@ -42,12 +39,26 @@ If your HTTP Client isn't automatically discovered you can pass it into the cons
 $accountInfo = (new Paulhennell\TwitterAccountInfo($httpClient))->getFromUsername("hennell_dev");
 ```
 
+### Nitter
+As of V1.0 this package relies on scraping the alternative twitter front end [Nitter](https://github.com/zedeus/nitter).
+
+Nitter has multiple instances and by default this package will randomly use one of four (see: RandomNitterUrl class).
+
+To specify a specific instance you can pass a url string in with the username:
+```php
+$accountInfo = (new Paulhennell\TwitterAccountInfo())->getFromUsername("hennell_dev", "https://nitter.net");
+```
+For more advance use (like random selection, or running an uptime check to pick a currently working nitter site) you can pass in any class that implements `NitterUrlInterface` - which simply needs to return a url string from a static method `getUrl`.
+
+You can find a helpful list of possible nitter instances [here](https://github.com/xnaas/nitter-instances)
 
 ## Testing
 
 ```bash
 composer test
 ```
+
+For client packages be sure to avoid running tests that would execute a web request. Use Mockery to fake the Twitter AccountInfo class and return a manually created AccountInfo object.
 
 ## Changelog
 
