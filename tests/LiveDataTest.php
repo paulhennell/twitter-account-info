@@ -30,7 +30,6 @@ class LiveDataTest extends TestCase
         $this->assertIsNumeric($accountInfo->likes_count);
     }
 
-
     /**
      * @test an empty profile is empty
      */

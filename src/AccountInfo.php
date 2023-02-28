@@ -2,9 +2,6 @@
 
 namespace Paulhennell\TwitterAccountInfo;
 
-use Paulhennell\TwitterAccountInfo\Exceptions\TwitterException;
-use voku\helper\HtmlDomParser;
-
 class AccountInfo
 {
     public function __construct(

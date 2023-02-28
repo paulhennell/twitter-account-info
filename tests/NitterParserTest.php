@@ -20,6 +20,5 @@ class NitterParserTest extends TestCase
         $this->assertEquals('384', $accountInfo->following_count);
         $this->assertEquals('97', $accountInfo->followers_count);
         $this->assertEquals('2161', $accountInfo->likes_count);
-
     }
 }

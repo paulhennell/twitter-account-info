@@ -10,7 +10,8 @@ class RandomNitterUrl implements NitterUrlInterface
         'https://nitter.nl',
         'https://nitter.ir',
     ];
-    public static function getUrl() : string
+
+    public static function getUrl(): string
     {
         return self::URLS[array_rand(self::URLS, 1)];
     }

@@ -4,5 +4,5 @@ namespace Paulhennell\TwitterAccountInfo\Nitter;
 
 interface NitterUrlInterface
 {
-    public static function getUrl() : string;
+    public static function getUrl(): string;
 }

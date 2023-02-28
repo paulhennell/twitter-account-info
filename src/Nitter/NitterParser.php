@@ -7,7 +7,7 @@ use voku\helper\HtmlDomParser;
 
 class NitterParser
 {
-    public function getAccountInfo(string $nitter_html) : AccountInfo
+    public function getAccountInfo(string $nitter_html): AccountInfo
     {
         $dom = HtmlDomParser::str_get_html($nitter_html);
 
@@ -21,7 +21,7 @@ class NitterParser
         );
     }
 
-    private function unformatNumber(string $number) : int
+    private function unformatNumber(string $number): int
     {
         return filter_var($number, FILTER_SANITIZE_NUMBER_INT);
     }

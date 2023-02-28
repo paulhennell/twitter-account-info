@@ -25,17 +25,18 @@ class TwitterAccountInfo
     public function getFromUsername(string $username, null|string|NitterUrlInterface $nitterUrl = null): AccountInfo
     {
         $url = $this->makeNitterUrl($username, $nitterUrl);
+
         return (new NitterParser())->getAccountInfo($this->makeRequest($url)->getBody()->getContents());
     }
 
-    private function makeNitterUrl(string $username, null|string|NitterUrlInterface $nitterUrl) : string
+    private function makeNitterUrl(string $username, null|string|NitterUrlInterface $nitterUrl): string
     {
         if (is_string($nitterUrl)) {
             return $nitterUrl . "/$username";
         }
         $nitterUrl = $nitterUrl ?? RandomNitterUrl::class;
-        return $nitterUrl::getUrl() . "/$username";
 
+        return $nitterUrl::getUrl() . "/$username";
     }
 
     private function makeRequest($url)
