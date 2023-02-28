@@ -6,6 +6,10 @@ use Http\Client\HttpClient;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
 use Http\Message\RequestFactory;
+use Paulhennell\TwitterAccountInfo\Exceptions\TwitterException;
+use Paulhennell\TwitterAccountInfo\Nitter\NitterParser;
+use Paulhennell\TwitterAccountInfo\Nitter\NitterUrlInterface;
+use Paulhennell\TwitterAccountInfo\Nitter\RandomNitterUrl;
 
 class TwitterAccountInfo
 {
@@ -18,19 +22,20 @@ class TwitterAccountInfo
         $this->requestFactory = $requestFactory ?: MessageFactoryDiscovery::find();
     }
 
-    public function getFromUsername(string $username): AccountInfo
+    public function getFromUsername(string $username, null|string|NitterUrlInterface $nitterUrl = null): AccountInfo
     {
-        return $this->loadFrom("https://cdn.syndication.twimg.com/widgets/followbutton/info.json?screen_names=$username");
+        $url = $this->makeNitterUrl($username, $nitterUrl);
+        return (new NitterParser())->getAccountInfo($this->makeRequest($url)->getBody()->getContents());
     }
 
-    public function getFromId(string $account_id): AccountInfo
+    private function makeNitterUrl(string $username, null|string|NitterUrlInterface $nitterUrl) : string
     {
-        return $this->loadFrom("https://cdn.syndication.twimg.com/widgets/followbutton/info.json?user_ids=$account_id");
-    }
+        if (is_string($nitterUrl)) {
+            return $nitterUrl . "/$username";
+        }
+        $nitterUrl = $nitterUrl ?? RandomNitterUrl::class;
+        return $nitterUrl::getUrl() . "/$username";
 
-    private function loadFrom($url)
-    {
-        return AccountInfo::fromJson($this->makeRequest($url)->getBody()->getContents());
     }
 
     private function makeRequest($url)
@@ -39,6 +44,8 @@ class TwitterAccountInfo
 
         if ($response->getStatusCode() == 200) {
             return $response;
+        } elseif ($response->getStatusCode() == 404) {
+            throw new TwitterException("Account does not exist");
         } else {
             throw new \Exception($response->getBody());
         }

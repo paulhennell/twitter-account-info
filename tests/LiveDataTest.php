@@ -24,19 +24,12 @@ class LiveDataTest extends TestCase
         $accountInfo = (new TwitterAccountInfo())->getFromUsername('hennell_dev');
 
         $this->assertInstanceOf(AccountInfo::class, $accountInfo);
-        $this->assertEquals("1261694242067447808", $accountInfo->id);
+        $this->assertIsNumeric($accountInfo->following_count);
+        $this->assertIsNumeric($accountInfo->followers_count);
+        $this->assertIsNumeric($accountInfo->tweet_count);
+        $this->assertIsNumeric($accountInfo->likes_count);
     }
 
-    /**
-     * @test you can get a profile
-     */
-    public function you_can_get_a_profile_by_id()
-    {
-        $accountInfo = (new TwitterAccountInfo())->getFromId('1261694242067447808');
-
-        $this->assertInstanceOf(AccountInfo::class, $accountInfo);
-        $this->assertEquals("Hennell_dev", $accountInfo->screen_name);
-    }
 
     /**
      * @test an empty profile is empty
@@ -44,6 +37,6 @@ class LiveDataTest extends TestCase
     public function an_empty_profile_is_empty()
     {
         $this->expectException(TwitterException::class);
-        $accountInfo = (new TwitterAccountInfo())->getFromUsername('realDonaldTrump');
+        $accountInfo = (new TwitterAccountInfo())->getFromUsername('this-user-does-not-exist-12343jjfcbf38');
     }
 }
