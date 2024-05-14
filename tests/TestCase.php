@@ -1,7 +1,7 @@
 <?php
 
- namespace Paulhennell\TwitterAccountInfo\Tests;
+namespace Paulhennell\TwitterAccountInfo\Tests;
 
- abstract class TestCase extends \PHPUnit\Framework\TestCase
- {
- }
+abstract class TestCase extends \PHPUnit\Framework\TestCase
+{
+}
