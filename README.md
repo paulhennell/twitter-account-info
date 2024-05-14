@@ -7,6 +7,9 @@
 
 This is a basic package to get the number of followers and other basic account info from Twitter without the complications of the official Twitter API. As a non-official project it should not be considered totally reliable, and as of v1.0 this relies on a Nitter instance, so if they all break, this will too.
 
+# Abandoned
+With twitter cracking down on API and scraping systems, the nitter workaround is so unreliable this package has become unusuable.
+
 ## Installation
 
 You can install the package via composer:
